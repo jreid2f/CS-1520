@@ -1,0 +1,33 @@
+.begin p{
+	color: blue;
+    font-style: italic;
+}
+
+#intro{
+	font-size: 3em;
+    color: darkgoldenrod;
+}
+
+#hobby{
+    font-size: 16pt;
+    color: darkred;
+}
+
+.primary-link{
+    font-size: 12pt;
+}
+
+.sun-image{
+    width: 300px;
+}
+
+#prog{
+    color: cadetblue;
+    font-size: 14pt;
+}
+
+#htm{
+    font-size: 15pt;
+    color: darkslateblue;
+}
+
