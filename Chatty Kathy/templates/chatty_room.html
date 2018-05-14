@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block title %}Chatty Room{% endblock %}
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Chatty Kathy</a>
+            </div>
+            <ul class='nav navbar-brand'>
+                <li>
+                    <a href="/leave_chatroom">Leave Chatroom</a>
+                </li>
+            </ul>
+            <ul class='nav navbar-nav navbar-right'>
+                <li> <a href="/logout">
+                    <span class='glyphicon glyphicon-log-out'></span> Logout
+                </a> </li>
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+
+    {% block messages %} {{ super() }} {% endblock %}
+    <div class="alert alert-warning" role="alert" id='ajaxError' style="display:none">
+        <strong>Warning</strong>
+    </div>
+
+    {% block body %}
+        <div class='container-fluid'>
+            <h1 id='roomName'>Welcome to the chatroom: <strong>{{ roomName }}</strong></h1>
+            <div class='table-responsive well pre-scrollable'>
+                <table id="chatTbl" class="table table-condensed table-responsive table-hover" style="overflow:auto">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2">Sender</th>
+                            <th class="col-md-2">Time</th>
+                            <th class="col-md-8">Message</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th class="col-md-2">Sender</th>
+                            <th class="col-md-2">Time</th>
+                            <th class="col-md-8">Message</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% if post %}
+                            {% for msg in post %}
+                            <tr>
+                                <td>{{ msg.post_msg }}</td>
+                                <td>{{ msg.post_date }}</td>
+                                <td>{{ msg.message }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="container">
+                <hr>
+                <form id='newMsg' name="newMsg" method="POST">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="2" id="txtMsg" name="post" style="resize:none"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-block btn-lg btn-primary" id="postMsg">Post Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>        
+
+        <script type="text/javascript" src="{{ url_for('static', filename='setMessage.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='getMessage.js') }}"></script>
+        <script type="text/javascript">
+            document.getElementById('postMsg').addEventListener('click', function(event){
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                let msg = document.getElementById('txtMsg').value;
+                setMessage(msg);
+                document.getElementById('txtMsg').value='';
+            });
+        </script>
+        <script type="text/javascript">
+            function message_pull(){
+                getMessage();
+                setTimeout(message_pull, 1000);
+            }
+
+            $( document ).ready(function(){
+                setTimeout(message_pull, 1000);
+            });
+        </script>
+    {% endblock %}
+    </body>

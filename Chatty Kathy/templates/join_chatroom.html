@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}Chatrooms{% endblock %}
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Chatty Kathy</a>
+            </div>
+            <ul class='nav navbar-brand'>
+                <li>
+                    <a href="create_chatroom">New Chatroom</a>
+                </li>
+            </ul>
+            <ul class='nav navbar-nav navbar-right'>
+                <li> <a href="logout">
+                    <span class='glyphicon glyphicon-log-out'></span> Logout
+                </a> </li>
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+    {% block messages %} {{ super() }} {% endblock %}
+    {% block body %}
+    <div class='container'>
+        <div class='well'>
+            {% if chatrooms %}
+            <h1 class='text-center'>Avaliable Chatrooms</h1>
+            <form id='registerForm' name='registerForm' method="POST">
+                <table id='chatTab' class='table table-condensed table-responsive table-hover' style='table-layout:fixed; word-wrap:break-word'>
+                    <thead>
+                        <tr>
+                            <th>Chatroom Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chatter in chatrooms %}
+                        <tr>
+                            <td>
+                                {{ chatter.name }}
+                            </td>
+                            <td class='text-center'>
+                                <a href='chatty_room/{{ chatter.name }}' class='btn btn-lg btn-success'>Join Chatroom</a>
+                            </td>
+                            {% if chatter.create_id == session['user_id'] %}
+                            <td>
+                                <button class='btn btn-lg btn-danger' id='{{ chatter.chat_id }}'>Delete Chatroom</button>
+                                <input type='hidden' value="{{ chatter.chat_id }}" name='delete' readonly>
+                            </td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            {% else %}
+            <h2 class='text-center text-danger'>No Chatrooms Avaliable at this Time</h2>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
+    </body>
+    

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Create User{% endblock %}
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Chatty Kathy</a>
+            </div>
+            <ul class='nav navbar-brand'>
+                <li>
+                    <a href="login">Home Page</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+
+    {% block messages %} {{ super() }} {% endblock %}
+    {% block body %}
+        <div class='container'>
+            <form class='form-register' id='userForm' name='userForm' method="POST">
+                <h2 class='register-heading'>Enter in your Username and Password</h2>
+                <label for='inputUsername' class='sr-only'>New Username</label>
+                <input type="text" id='inputUsername' name='username' class='form-control' placeholder="New Username" maxlength="100" required autofocus>
+                <label for='inputPassword' class="sr-only">New Password</label>
+                <input type="password" id="inputPassword" name='password' class="form-control" placeholder="Password" maxlength="100" required>
+                <button class="btn btn-lg btn-success btn-block" type="submit">Submit</button>
+            </form>
+        </div>
+    {% endblock %}
+</body>

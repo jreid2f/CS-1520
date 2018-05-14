@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Create New Chatroom{% endblock %}
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Chatty Kathy</a>
+            </div>
+            <ul class='nav navbar-brand'>
+                <li>
+                    <a href="join_chatroom">Go Back</a>
+                </li>
+            </ul>
+            <ul class='nav navbar-nav navbar-right'>
+                <li> <a href="logout">
+                    <span class='glyphicon glyphicon-log-out'></span> Logout
+                </a> </li>
+            </ul>
+        </div>
+    </nav>
+    {% endblock %}
+    {% block messages %} {{ super() }} {% endblock %}
+    {% block body %}
+    <div class='container'>
+        <form class="form-register" id="userForm" name="userForm" method="POST">
+            <h2>Time to Create a new Chatroom</h2>
+            <label for="inputUsername" class="sr-only">New Chatroom Name</label>
+            <input type="text" id='inputUsername' name='username' class='form-control' placeholder="New Chatroom Name" required autofocus>
+            <button class="btn btn-lg btn-success btn-block" type="submit">Create Chatroom</button>
+        </form>
+    </div>
+    {% endblock %}
+    </body>
