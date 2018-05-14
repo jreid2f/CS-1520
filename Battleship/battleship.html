@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Battleship</title>
+    <link rel="stylesheet" type="text/css" href="battle.css">
+</head>
+<body>
+    <h1>Battleship</h1>
+    <div id="grid1"></div>
+    <div id="grid2"></div>
+    <div id="winner"></div>
+</body>
+</html>
+<!-- END OF PAGE, BEGIN JAVASCRIPT --> 
+
+<script type="text/javascript">
+    /*
+    3. Decide winner or loser(Track score)
+    4. Make winner div
+    
+    */
+
+    var rowChars = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    var cellChars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    
+    var regExString = "";
+    var inputCoordinates = "";
+
+    var player1_hitList = ["", "", "", "", "", "", "", "", "", "", "", ""];
+    var player2_hitList = ["", "", "", "", "", "", "", "", "", "", "", ""];
+    
+    var player1_waterTable = "waterTable1";
+    var player1_launchTable = "launchTable1";
+    var player2_waterTable = "waterTable2";
+    var player2_launchTable = "launchTable2";
+    var player1_gridName = "grid1";
+    var player2_gridName = "grid2";
+    var currentPlayerDiv = player1_gridName;
+
+    var player1Coords = [""];
+    var name1 = prompt("Player 1, enter your name.");
+    inputCoordinates = prompt("Player 1, Enter your coordinates(Ex: A:A1-A5;B:B6-E6;S:H3-J3)");
+    regExString = inputCoordinates.match(/[ASB]?[(:]?([A-J]\d)-([A-J]\d)?[)]?[;]?/g);
+    player1Coords = getShipCoordinatesArray(regExString, 1);
+
+    var player2Coords = [""];
+    var name2 = prompt("Player 2, enter your name.");
+    inputCoordinates = prompt("Player 2, Enter your coordinates(Ex: A:A1-A5;B:B6-E6;S:H3-J3)");
+    regExString = inputCoordinates.match(/[ASB]?[(:]?([A-J]\d)-([A-J]\d)?[)]?[;]?/g);
+    player2Coords = getShipCoordinatesArray(regExString, 2);
+    
+    alert(name1 + ", it is your turn!");
+
+    GenerateTable(player1_launchTable, "lightBlueGrid", true, player1_gridName, false);
+    GenerateTable(player1_waterTable, "lightBlueGrid", false, player1_gridName, false);
+    GenerateTable(player2_launchTable, "lightBlueGrid", true, player2_gridName, false);
+    GenerateTable(player2_waterTable, "lightBlueGrid", false, player2_gridName, true);
+    
+    setShipsOnBoard(player1Coords, 1);
+    setShipsOnBoard(player2Coords, 2);
+
+    function GenerateTable(id, css, click, grid, hideGrid, player) {
+        var table = document.createElement("table");
+        table.id = id;
+        var rowCount = 10;
+        var colCount = 10;
+        var i = 0;
+        var j = 0;
+
+        for(i = 0; i < rowCount; i++){
+            var row = table.insertRow(i);
+
+            for(j = 0; j < colCount; j++){
+                var td = document.createElement("td");
+                td.setAttribute("id", cellChars[j] + rowChars[i] + "_" + id);
+                td.setAttribute("class", css);
+                if (click == true){
+                    td.addEventListener("click", function () { fire(this); }, true);
+                }
+                row.appendChild(td);
+            }
+
+        }
+
+        var c = document.getElementById(grid);
+        c.appendChild(table);
+        if(hideGrid)
+        {
+            c.setAttribute("class", "hiddenDiv");
+        }
+    }
+
+    function fire(torpedo){
+        
+        var launchTable;
+        var waterTable;
+        var currCoords;
+        var playerHitList;
+        var player = 1;
+        var gameOver = false;
+        
+        if(currentPlayerDiv == player1_gridName)
+        {
+            launchTable = document.getElementById(player1_launchTable);
+            waterTable = document.getElementById(player2_waterTable);
+            currCoords = player1Coords;
+            player = 1;
+        }
+        else
+        {
+            launchTable = document.getElementById(player2_launchTable);
+            waterTable = document.getElementById(player1_waterTable);
+            currCoords = player2Coords;
+            player = 2;
+        }
+
+        var exit = false;
+        var hitCount = 0;
+        for (var j = 0; j < launchTable.rows.length; j++) {
+            if (exit){
+                break;
+            }
+            for (var i = 0; i < launchTable.rows[j].cells.length; i++) {
+                var hitCell = launchTable.rows[j].cells[i];
+                var waterCell = waterTable.rows[j].cells[i];
+                var id = cellChars[i] + rowChars[j] + "_" + launchTable.id;
+                if (torpedo.id == id) {
+                    var coordIndex = currCoords.indexOf(id);
+                    if (coordIndex > -1){
+                        alert('Hit');
+                        hitCell.setAttribute("class", "redBlock");
+                        waterCell.setAttribute("class", "redBlock");
+                        hitCount += 2;
+                        if(player == 1)
+                        {
+                            player1_hitList[coordIndex] = id;
+                            playerHitList = player1_hitList;
+                        }
+                        else
+                        {
+                            player2_hitList[coordIndex] = id;                            
+                            playerHitList = player2_hitList;
+                        }
+                
+                        gameOver = checkScore(playerHitList, coordIndex);
+                    }
+                    else
+                    {
+                        hitCell.setAttribute("class", "whiteBlock");
+                        waterCell.setAttribute("class", "whiteBlock");
+                        alert('Missed');
+                    }
+            
+                    exit = true;
+                    break;
+                }
+            }
+        }
+        
+        if(!gameOver)
+        {
+            //get elementById for grid1 and body tag
+            var hiddenDiv = document.getElementById(currentPlayerDiv);
+            hiddenDiv.setAttribute("class", "hiddenDiv");
+            if(currentPlayerDiv == player1_gridName)
+            {
+                alert(name2 + ", it is your turn!");
+                currentPlayerDiv = player2_gridName;
+            }
+            else
+            {    
+                alert(name1 + ", it is your turn!");
+                currentPlayerDiv = player1_gridName;
+            }        
+            var visibleDiv = document.getElementById(currentPlayerDiv);
+            visibleDiv.setAttribute("class", "visibleDiv");
+        }
+        else
+        {
+            var grid1 = document.getElementById(player1_gridName);
+            grid1.setAttribute("class", "hiddenDiv");
+            var grid2 = document.getElementById(player2_gridName);
+            grid2.setAttribute("class", "hiddenDiv");
+            var win = document.getElementById("winner");
+            win.setAttribute("class", "visibleDiv");
+            if(currentPlayerDiv == player1_gridName)
+            {
+                win.innerHTML = "<h1>" + name1 + " Wins!</h1>";
+            }
+            else
+            {
+                win.innerHTML = "<h1>" + name2 + " Wins!</h1>";                
+            }
+            
+        }
+                
+    }
+
+    function getShipCoordinatesArray(coordArray, player)
+    {
+        //A:A1-A5;
+        //B:B6-E6;
+        //S:H3-J3
+        
+        var ship1 = coordArray[0].substr(0, 2);
+        var ship2 = coordArray[1].substr(0, 2);
+        var ship3 = coordArray[2].substr(0, 2);
+        
+        var ship1Range = coordArray[0].substr(2, 5);
+        var ship2Range = coordArray[1].substr(2, 5);
+        var ship3Range = coordArray[2].substr(2, 5);
+
+        var returnArray = ["", "", "", "", "", "", "", "", "", "", "", ""];
+        
+        getCorrdinateRange(ship1, ship1Range, player, returnArray);
+        getCorrdinateRange(ship2, ship2Range, player, returnArray);
+        getCorrdinateRange(ship3, ship3Range, player, returnArray);
+                
+        return returnArray;
+    }
+    
+    function getCorrdinateRange(ship, coordRange, player, coordArray)
+    {
+        //A:A1-A5;B:B6-E6;S:H3-J3        
+        var ranges = coordRange.split("-");
+        var rangeStart = ranges[0]
+        var rangeEnd = ranges[1];
+        
+        var startCol = rangeStart.substr(0, 1);
+        var startRow = rangeStart.substr(1);
+        var endCol = rangeEnd.substr(0, 1);
+        //var endRow = rangeEnd.substr(1);
+        
+        var tableId;
+        
+        if(player == 1)
+        {
+            tableId = player1_launchTable;
+        }
+        else
+        {
+            tableId = player2_launchTable;
+        }
+
+        switch(ship)
+        {
+            case "A:":
+                if(startCol != endCol)
+                {
+                    var ind = cellChars.indexOf(startCol);
+                    coordArray[0] = cellChars[ind] + startRow + "_" + tableId;
+                    coordArray[1] = cellChars[(ind + 1)] + startRow + "_" + tableId;
+                    coordArray[2] = cellChars[(ind + 2)] + startRow + "_" + tableId;
+                    coordArray[3] = cellChars[(ind + 3)] + startRow + "_" + tableId;
+                    coordArray[4] = cellChars[(ind + 4)] + startRow + "_" + tableId;
+                }
+                else
+                {
+                    var ind = rowChars.indexOf(startRow);
+                    coordArray[0] = startCol + rowChars[ind] + "_" + tableId;
+                    coordArray[1] = startCol + rowChars[(ind + 1)] + "_" + tableId;
+                    coordArray[2] = startCol + rowChars[(ind + 2)] + "_" + tableId;
+                    coordArray[3] = startCol + rowChars[(ind + 3)] + "_" + tableId;
+                    coordArray[4] = startCol + rowChars[(ind + 4)] + "_" + tableId;
+                }                
+                break;
+            case "B:":
+                if(startCol != endCol)
+                {
+                    var ind = cellChars.indexOf(startCol);
+                    coordArray[5] = cellChars[ind] + startRow + "_" + tableId;
+                    coordArray[6] = cellChars[(ind + 1)] + startRow + "_" + tableId;
+                    coordArray[7] = cellChars[(ind + 2)] + startRow + "_" + tableId;
+                    coordArray[8] = cellChars[(ind + 3)] + startRow + "_" + tableId;
+                }
+                else
+                {
+                    var ind = rowChars.indexOf(startRow);
+                    coordArray[5] = startCol + rowChars[ind] + "_" + tableId;
+                    coordArray[6] = startCol + rowChars[(ind + 1)] + "_" + tableId;
+                    coordArray[7] = startCol + rowChars[(ind + 2)] + "_" + tableId;
+                    coordArray[8] = startCol + rowChars[(ind + 3)] + "_" + tableId;
+                }
+                break;
+            case "S:":
+                if(startCol != endCol)
+                {
+                    var ind = cellChars.indexOf(startCol);
+                    coordArray[9] = cellChars[ind] + startRow + "_" + tableId;
+                    coordArray[10] = cellChars[(ind + 1)] + startRow + "_" + tableId;
+                    coordArray[11] = cellChars[(ind + 2)] + startRow + "_" + tableId;
+                }
+                else
+                {
+                    var ind = rowChars.indexOf(startRow);
+                    coordArray[9] = startCol + rowChars[ind] + "_" + tableId;
+                    coordArray[10] = startCol + rowChars[(ind + 1)] + "_" + tableId;
+                    coordArray[11] = startCol + rowChars[(ind + 2)] + "_" + tableId;
+                }
+                break;
+        }
+            
+    }
+    
+    function setShipsOnBoard(coordArray, player)
+    {
+        var tableId;
+        if(player == 1)
+        {
+            tableId = player1_waterTable;
+        }
+        else
+        {
+            tableId = player2_waterTable;
+        }
+        
+        //Aircraft Carrier
+        var cell = document.getElementById(coordArray[0].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "A";
+        
+        cell = document.getElementById(coordArray[1].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "A";
+        
+        cell = document.getElementById(coordArray[2].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "A";
+        
+        cell = document.getElementById(coordArray[3].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "A";
+
+        cell = document.getElementById(coordArray[4].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "A";
+
+        //Battleship
+        cell = document.getElementById(coordArray[5].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "B";
+        
+        cell = document.getElementById(coordArray[6].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "B";
+        
+        cell = document.getElementById(coordArray[7].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "B";
+        
+        cell = document.getElementById(coordArray[8].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "B";
+
+
+        //Submarine
+        var cell = document.getElementById(coordArray[9].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "S";
+        
+        cell = document.getElementById(coordArray[10].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "S";
+        
+        cell = document.getElementById(coordArray[11].split("_")[0] + "_" + tableId);
+        cell.innerHTML = "S";
+
+    }
+    
+    function checkScore(hitArray, lastShipHit, player)
+    {        
+        var returnValue = hitArray.indexOf("") == -1;
+        
+        return returnValue;
+    }
+
+</script>
