@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Joe's Catering Company</h2>
+  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('login') }}" method="post">
+    <dl>
+      <dt>Username:
+      <dd><input type="text" name="user">
+      <dt>Password:
+      <dd><input type="text" name="pass">
+      <dd><input type="submit" value="Login">
+    </dl>
+  </form>
+
+  <div>
+    <h2>Create a new customer account</h2>
+    <a href="{{ url_for('customer_account') }}" action"{{ url_for('customer_account') }}" method="post">Create Account</a>
+  </div>
+{% endblock %}

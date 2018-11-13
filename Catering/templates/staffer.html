@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Staffer Account</h2><br/>
+<div>
+  <h3>Events you are signed up for:</h3><br/>
+  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+    {% for eve in signup %}
+        <h4>-{{eve.title}} ({{eve.date}})</h4>
+    {% endfor %}
+    <h3>Events you can sign up for:</h3>
+    {% for eve in available %}
+        <form action="" method="POST">   
+        <input type="radio" name="event" id="event" value="{{eve.title}}"> {{eve.title}} ({{eve.date}})<br/>
+    {% endfor %}<br/>
+    <input type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}
