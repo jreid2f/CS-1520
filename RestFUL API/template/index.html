@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Buster Budget</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>Buster Budget</h1>
+    </div>
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h3>New Budget Category</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="name" class="col-3 col-form-label">Name</label>
+                    <div class="col-9">
+                        <input class="form-control" type="text" id="name">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="limit" class="col-3 col-form-label">Spending Limit</label>
+                    <div class="input-group col-9">
+                        <input type="number" class="form-control" id="limit">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary btn-sm" style="cursor: pointer;" id="add">Add Budget</button>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h3>New Purchase Category</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="purchase" class="col-3 col-form-label">Add Purchase</label>
+                    <div class="col-9">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" style="cursor: pointer;" id="purchase" data-toggle="dropdown">Select Category</button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="selectPurchase"></div>
+                            <label for="selectPurchase" class="col-form-label" id="purchaseCat"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="amountSpent" class="col-3 col-form-label">Amount Spent</label>
+                    <div class="col-9">
+                        <input class="form-control" type="number" id="amountSpent">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="spentOn" class="col-3 col-form-label">Purchased Object</label>
+                    <div class="col-9">
+                        <input class="form-control" type="text" id="spentOn">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="purchaseDate" class="col-3 col-form-label">Purchase Date</label>
+                    <div class="col-9">
+                        <input class="form-control" type="date" id="purchaseDate">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary btn-sm" style="cursor: pointer;" id="addPurchase">Add Purchase</button>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Status</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive pre-scrollable card-body">
+                    <table class="table table-sm" id="statistic">
+                        <thead>
+                            <tr>
+                                <th>Budget</th>
+                                <th>Spending Limit</th>
+                                <th>Amount Spent</th>
+                                <th>Amount Remaining</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h3>Delete Budget</h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" style="cursor: pointer;" id="deleteSelect" data-toggle="dropdown">Select Budget</button>
+                        <div class="dropdown-menu" aria-labelledby="deleteButton" id="deleteBudget"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='RESTful_API.js') }}"></script>
+</body>
+</html>
