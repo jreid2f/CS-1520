@@ -17,7 +17,7 @@ lxml==4.2.0
 python_memcached==1.59
 ndg_httpsclient==0.4.4
 nt==0.0.0
-numpy==1.14.2
+numpy==1.22.0
 org==1.0.0
 pretty==0.1
 pyasn1==0.4.2
