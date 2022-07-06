@@ -13,7 +13,7 @@ ipaddr==2.2.0
 java==0.0.1
 keyring==12.0.0
 libmc==1.1.0
-lxml==4.2.0
+lxml==4.9.1
 python_memcached==1.59
 ndg_httpsclient==0.4.4
 nt==0.0.0
