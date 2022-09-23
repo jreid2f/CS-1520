@@ -7,7 +7,7 @@ backports.functools_lru_cache==1.5
 blinker==1.4
 com==1.0.0
 ed25519ll==0.6
-protobuf==3.5.2.post1
+protobuf==3.18.3
 greenlet==0.4.13
 ipaddr==2.2.0
 java==0.0.1
